@@ -24,8 +24,8 @@ urlpatterns = patterns('',
 #    url(r'^cerrar/$', 'principal.views.cerrar'),
     # ex: /polls/
     url(r'^index', views.index),
+    url(r'^running', views.startAplication),
     # ex: /polls/5/
-    url(r'^showState', views.showState, name='showState'),
     # ex: /pswitchLed1/
     url(r'^switchLed1', views.switchLed1, name='switchLed1'),
     # ex: /polls/5/vote/

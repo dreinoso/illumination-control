@@ -1,18 +1,30 @@
 <!DOCTYPE HTML> 
  <html>
+
   <head>
+    <META HTTP-EQUIV="refresh" CONTENT="2">
     <title>Sistemas de Computación: Trabajo Final</title>
   </head>
   <body>
    	<h1>Sistemas de Computación<br>Trabajo Final</h1>
-    <p>Esta página corresponde al Trabajo Final de Sistemas de computación. En la Facultad Universidad Nacional de Córdoba.</p>
-    <form action="http://127.0.0.1/running">
-      <input type="submit" value="Iniciar Aplicación">
+    <p>El sistema de control se esta ejecutando actualmente.</p>
+    <form action="http://127.0.0.1/index">
+      <input type="submit" value="Detener Aplicación">
     </form>
-    <br>
-    <form action="http://127.0.0.1/about">
-      <input type="submit" value="Acerca de...">
+    <form action="http://127.0.0.1/switchLed1">
+      <input type="submit" value="Cambiar Led 1">
     </form>
+    <form action="http://127.0.0.1/switchLed2">
+      <input type="submit" value="Cambiar Led 2">
+    </form>
+    <p><br>Estado del Sistema:<br></p>
+    <p>-Iluminación de la habitación 1:  <b>{{led1State}}</b></p>
+    <p>-Iluminación de la habitaicón 2:  <b>{{led2State}}</b></p>
+    <p>-Iluminación del patio trasero :  <b>{{backyardState}}</b></p>
+    <p><br>Eventos del Sistema:<br></p>
+    <p><b>{{events}}</b></p>
+</body>
+</html>
 
 
  <!--    

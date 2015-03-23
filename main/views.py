@@ -7,6 +7,8 @@ from django.http import HttpResponse
 from django.template import RequestContext, loader
 
 from IlluminationControlSystem import processingModule
+import threading
+import time
 
 def index(request):
     #return HttpResponse("Sistemas de Computación \n     Trabajo Final")
@@ -18,26 +20,35 @@ def index(request):
     print "Estas en el Index"
     return render_to_response('main/index.html')
 
-def showState(request):
-    stateList = processingModule.reportCommand()
-    #stateList = ["prendido", "apagado", "stat de backyard?"]
-    stateList0 = checkState(stateList[0])
-    stateList1 = checkState(stateList[1])
-    stateList2 = checkState(stateList[2])
-    return render_to_response("main/showState.html",{"stateList0": stateList0, "stateList1": stateList1, "stateList2": stateList2})
+def startAplication(request):
+    global running,eventThread,emailModule,led1State,led2State,backyardState,events
+    if not running:
+        #eventThread.start()
+        processingModule.roomCommand("room01_stats")
+        #time.sleep(1)
+        processingModule.roomCommand("room02_stats")
+        #time.sleep(1)
+        processingModule.roomCommand("backyard_stats")
+        #time.sleep(1)
+        events = ''
+        running = True
+        waitEvents(request)
+    return render_to_response("main/running.html",{"led1State": led1State, "led2State": led2State, "backyardState": backyardState, "events": events})
 
 def switchLed1(request):
-    stateLed1 = processingModule.roomCommand("room01_toggle")
-    stateLed1 = checkState(stateLed1)
-    #stateLed1 = "prendido"
-    return render_to_response("main/switchLed1.html",{"stateLed1": stateLed1})
-   
+    processingModule.roomCommand("room01_toggle")
+    #global led1State,led2State,backyardState,events
+    #time.sleep(1)
+    #return render_to_response("main/running.html",{"led1State": led1State, "led2State": led2State, "backyardState": backyardState, "events": events})
+    return render_to_response("main/switchLed1.html")
+       
 def switchLed2(request):
-    stateLed2 = processingModule.roomCommand("room02_toggle")
-    stateLed2 = checkState(stateLed2)
-    #stateLed2 = "apagado"
-    return render_to_response("main/switchLed2.html",{"stateLed2": stateLed2})
-
+    processingModule.roomCommand("room02_toggle")
+    #global led1State,led2State,backyardState,events
+    #time.sleep(1)
+    #return render_to_response("main/running.html",{"led1State": led1State, "led2State": led2State, "backyardState": backyardState, "events": events})
+    return render_to_response("main/switchLed2.html")
+ 
 def about(request):
     return HttpResponse("<center>Este trabajo corresponde a un desarrollo de domótica para \
     	el control de iluminación de una vivienda <br><br> Autores:<br>&nbsp   \
@@ -50,3 +61,62 @@ def checkState(state):
         return 'prendido'
     else:
         return 'apagado'
+
+def waitEvents(request):
+    global emailModule,led1State,led2State,backyardState,events
+    while(True):
+        print 'Se esta esperando un evento...'
+        event = processingModule.microcontrollerInstance.readOutput()
+        if event == 'motion_on':
+                #modemClass.motionSensor_flag = True
+                #emailModule.motionSensor_flag = True
+            print time.ctime() + ': Se ha detectado movimiento!'
+            events = events + '\n' + time.ctime() + ': Se ha detectado movimiento!'
+        elif event == 'motion_off':
+            print time.ctime() + ': Ya no hay movimiento!'
+            events = events + '\n' + time.ctime() + ': Ya no hay movimiento!'
+        elif event == 'light_on':  
+            print time.ctime() + ': Oscurecio y la lampara fue encendida!'
+            events = events + '\n' + time.ctime() + ': Oscurecio y la lampara fue encendida!'
+            backyardState = 'prendido'
+        elif event == 'light_off':
+            print time.ctime() + ': Hay suficiente luz y la lampara fue apagada!'
+            events = events + '\n' + time.ctime() + ': Hay suficiente luz y la lampara fue apagada!'
+            backyardState = 'apagado'
+        elif event == 'room01_on' or event == 'room01_led_on':
+            print time.ctime() + ': La lampara de la Habitacion 01 fue encendida!'
+            events = events + '\n' + time.ctime() + ': La lampara de la Habitacion 01 fue encendida!'
+            led1State = 'prendido'
+        elif event == 'room01_off' or event == 'room01_led_off':
+            print time.ctime() + ': La lampara de la Habitacion 01 fue apagada!'
+            events = events + '\n' + time.ctime() + ': La lampara de la Habitacion 01 fue apagada!'
+            led1State = 'apagado'
+        elif event == 'room02_on' or event == 'room02_led_on':
+            print time.ctime() + ': La lampara de la Habitacion 02 fue encendida!'
+            events = events + '\n' + time.ctime() + ': La lampara de la Habitacion 02 fue encendida!'
+            led2State = 'prendido'
+        elif event == 'room02_off' or event == 'room02_led_off':
+            print time.ctime() + ': La lampara de la Habitacion 02 fue apagada!'
+            events = events + '\n' + time.ctime() + ': La lampara de la Habitacion 02 fue apagada!'
+            led2State = 'apagado'
+        updateRunning(request)
+    return render_to_response("main/running.html",{"led1State": led1State, "led2State": led2State, "backyardState": backyardState, "events": events})
+
+
+def updateRunning(request):
+    global led1State,led2State,backyardState,events
+    print '------------------------------------------------'
+    return render_to_response("main/running.html",{"led1State": led1State, "led2State": led2State, "backyardState": backyardState, "events": events})
+
+def stopAplication(request):
+    global eventThread,running
+    #eventThread.stop() -- No se pueden parar hilos..
+    #running = False
+    return render_to_response("main/index.html")
+
+running = False
+led1State ='apagado'
+led2State ='apagado'
+backyardState ='apagado'
+events =''
+#eventThread = threading.Thread(target = waitEvents)

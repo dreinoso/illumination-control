@@ -1,15 +1,18 @@
 #Archivo de pruebas
-cadena = 'room_on'
-if cadena.find('onlk'):
-	print 'si esta'
-else:
-	print 'no esta'
+cadena = 'hola'
 
-if 1:
-	print 'con el uno es true'
+def funcion1():
+	global cadena 
+	cadena ='no es hola'
+	print cadena
 
-if -1:
-	print 'con el menos uno es true'
+def funcion2():
+	print cadena
+	global cadena
+	cadena ='otra cosa'
 
-if 0:
-	print 'con el cero es true'
+
+
+funcion1()
+funcion2()
+print cadena

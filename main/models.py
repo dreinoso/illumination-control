@@ -25,7 +25,16 @@ class Bebida(models.Model):
 
  	def getContador(self):
  		return contador
-# 	def __unicode__(self):
-# 		return self.nombre
-
-# Create your models here.
+# class System(models.Model):
+# 	self.led1State = ''
+#     self.led2State = ''
+#     self.backyardState = ''
+#     self.events = ''
+#     self.started = True
+    
+#  	def __init__(self):
+#  		self.led1State = 'apagada'
+#     	self.led2State = 'apagada'
+#     	self.backyardState = 'apagada'
+#     	self.events = 'Sin eventos'
+#     	self.started = True

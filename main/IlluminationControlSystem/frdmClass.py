@@ -45,7 +45,7 @@ class Microcontroller(object):
         print 'Se envio a la placa el comando: ' + cmd
         self.microcontrollerInstance.write(cmd)
 
-    def readOutput(self):
+    def readOutput2(self):
 	""" Lee y devuelve lo que recibe del dispositivo Freescale.
             @return: respuesta del dispositivo, al comando ingresado
             @rtype: str """
@@ -53,34 +53,17 @@ class Microcontroller(object):
         while not self.microcontrollerOutput_flag:
             # ... nos quedamos esperando.
             pass
+        #print 'Se recibio un mensaje de kl46Z'
         self.microcontrollerOutput_flag = False
         return self.microcontrollerOutput
 
-    def readOutput2(self):
-        print 'Esperando mensaje de kl46Z'
+    def readOutput(self):
+        #print 'Esperando mensaje de kl46Z'
         while self.microcontrollerInstance.inWaiting() <= 0:
             pass
         time.sleep(0.5)
         self.microcontrollerOutput = self.microcontrollerInstance.read(self.microcontrollerInstance.inWaiting()).lower()
         print 'El mensaje recibido fue: ' + self.microcontrollerOutput
-        if self.microcontrollerOutput == 'motion_on':
-            #modemClass.motionSensor_flag = True
-            #emailModule.motionSensor_flag = True
-            print time.ctime() + ': Se ha detectado movimiento!'
-        elif self.microcontrollerOutput == 'motion_off':
-            print time.ctime() + ': Ya no hay movimiento!'
-        elif self.microcontrollerOutput == 'light_on':
-            print time.ctime() + ': Oscurecio y la lampara fue encendida!'
-        elif self.microcontrollerOutput == 'light_off':
-            print time.ctime() + ': Hay suficiente luz y la lampara fue apagada!'
-        elif self.microcontrollerOutput == 'room01_on':
-            print time.ctime() + ': La lampara de la Habitacion 01 fue encendida!'
-        elif self.microcontrollerOutput == 'room01_off':
-            print time.ctime() + ': La lampara de la Habitacion 01 fue apagada!'
-        elif self.microcontrollerOutput == 'room02_on':
-            print time.ctime() + ': La lampara de la Habitacion 02 fue encendida!'
-        elif self.microcontrollerOutput == 'room02_off':
-            print time.ctime() + ': La lampara de la Habitacion 02 fue apagada!'
         return self.microcontrollerOutput
 
     def waitOutput(self):
@@ -95,8 +78,8 @@ class Microcontroller(object):
             time.sleep(0.5)
             self.microcontrollerOutput = self.microcontrollerInstance.read(self.microcontrollerInstance.inWaiting()).lower()
             if self.microcontrollerOutput == 'motion_on':
-                modemClass.motionSensor_flag = True
-                emailModule.motionSensor_flag = True
+                #modemClass.motionSensor_flag = True
+                #emailModule.motionSensor_flag = True
                 print time.ctime() + ': Se ha detectado movimiento!'
             elif self.microcontrollerOutput == 'motion_off':
                 print time.ctime() + ': Ya no hay movimiento!'

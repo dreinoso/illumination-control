@@ -67,14 +67,14 @@ def roomCommand(roomCommand):
             @rtype: str """
         microcontrollerInstance.sendCMD(roomCommand)
         microcontrollerInstance.sendCMD('@')
-        time.sleep(1)
+        #time.sleep(1)
         # Una vez enviado el comando que el usuario solicito, enviamos automaticamente otro comando para saber en que estado quedo el pin GPIO...
-        if roomCommand == enums.specificCommands.ROOM01_TOGGLE:
-                microcontrollerInstance.sendCMD(enums.specificCommands.ROOM01_STATS)
-        elif roomCommand == enums.specificCommands.ROOM02_TOGGLE:
-                microcontrollerInstance.sendCMD(enums.specificCommands.ROOM02_STATS)
-        microcontrollerInstance.sendCMD('@')
-        return microcontrollerInstance.readOutput2()
+        # if roomCommand == enums.specificCommands.ROOM01_TOGGLE:
+        #         microcontrollerInstance.sendCMD(enums.specificCommands.ROOM01_STATS)
+        # elif roomCommand == enums.specificCommands.ROOM02_TOGGLE:
+        #         microcontrollerInstance.sendCMD(enums.specificCommands.ROOM02_STATS)
+        # microcontrollerInstance.sendCMD('@')
+        #return microcontrollerInstance.readOutput()
 
 def initializeMicrocontroller():
 	""" Crea una instancia del 'Microcontroller' de Freescale. """
@@ -85,7 +85,7 @@ processingDictionary = dict()
 commandsDictionary = dict()
 
 print 'Comenzando ProcessingModule...'
-#microcontrollerInstance = frdmClass.Microcontroller
+microcontrollerInstance = frdmClass.Microcontroller
 
 #initializeMicrocontroller()
 microcontrollerInstance = frdmClass.Microcontroller()
