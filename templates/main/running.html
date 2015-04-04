@@ -5,10 +5,11 @@
     <META HTTP-EQUIV="refresh" CONTENT="2">
     <title>Sistemas de Computación: Trabajo Final</title>
   </head>
-  <body>
-   	<h1>Sistemas de Computación<br>Trabajo Final</h1>
+  <BODY bgcolor="black" BGPROPERTIES="fixed">
+    <font color="White">   	
+    <h1>Sistemas de Computación<br>Trabajo Final</h1>
     <p>El sistema de control se esta ejecutando actualmente.</p>
-    <form action="http://127.0.0.1/index">
+    <form action="http://127.0.0.1/stopAplication">
       <input type="submit" value="Detener Aplicación">
     </form>
     <form action="http://127.0.0.1/switchLed1">
@@ -22,8 +23,10 @@
     <p>-Iluminación de la habitaicón 2:  <b>{{led2State}}</b></p>
     <p>-Iluminación del patio trasero :  <b>{{backyardState}}</b></p>
     <p><br>Eventos del Sistema:<br></p>
-    <p><b>{{events}}</b></p>
-</body>
+    {% for event in events %}
+      {{ event }}<br>
+    {% endfor %}
+  </body>
 </html>
 
 

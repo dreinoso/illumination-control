@@ -28,21 +28,21 @@ def initializeTimer():
         emailTimerInstance.start()                                  # Ponemos en ejecucion la instancia
 
 def initializeEmail():
-        """ Configura el protocolo SMTP y el protocolo IMAP. El primero se encargara
-            de enviar correos electronicos, mientras que el segungo a recibirlos.
-            Ambos disponen de una misma cuenta asociada a GMAIL para tales fines (y
-            que esta dada en el archivo 'contactList.py'. """
-        global smtpServer, imapServer
-	print 'Configurando el modulo EMAIL...'
-	smtpServer = smtplib.SMTP(contactList.SMTP_SERVER, contactList.SMTP_PORT)      # Establecemos servidor y puerto SMTP
-	smtpServer.starttls()
-	smtpServer.ehlo()
-	smtpServer.login(contactList.EMAIL_SERVER, contactList.PASS_SERVER)            # Nos logueamos en el servidor SMTP
-	imapServer = imaplib.IMAP4_SSL(contactList.IMAP_SERVER, contactList.IMAP_PORT) # Establecemos servidor y puerto IMAP
-	imapServer.login(contactList.EMAIL_SERVER, contactList.PASS_SERVER)            # Nos logueamos en el servidor IMAP
-	imapServer.select('INBOX')                                                     # Seleccionamos la Bandeja de Entrada
-	socket.setdefaulttimeout(10)                                                   # Establecemos tiempo maximo antes de reintentar lectura
-	print 'El modo EMAIL esta listo para usarse!'
+    """ Configura el protocolo SMTP y el protocolo IMAP. El primero se encargara
+    de enviar correos electronicos, mientras que el segungo a recibirlos.
+    Ambos disponen de una misma cuenta asociada a GMAIL para tales fines (y
+    que esta dada en el archivo 'contactList.py'. """
+    global smtpServer, imapServer
+    print 'Configurando el modulo EMAIL...'
+    smtpServer = smtplib.SMTP(contactList.SMTP_SERVER, contactList.SMTP_PORT)      # Establecemos servidor y puerto SMTP
+    smtpServer.starttls()
+    smtpServer.ehlo()
+    smtpServer.login(contactList.EMAIL_SERVER, contactList.PASS_SERVER)            # Nos logueamos en el servidor SMTP
+    imapServer = imaplib.IMAP4_SSL(contactList.IMAP_SERVER, contactList.IMAP_PORT) # Establecemos servidor y puerto IMAP
+    imapServer.login(contactList.EMAIL_SERVER, contactList.PASS_SERVER)            # Nos logueamos en el servidor IMAP
+    imapServer.select('INBOX')                                                     # Seleccionamos la Bandeja de Entrada
+    socket.setdefaulttimeout(10)                                                   # Establecemos tiempo maximo antes de reintentar lectura
+    print 'El modo EMAIL esta listo para usarse!'
 
 def closeEmail():
         """ Finaliza la sesion iniciada con ambos servidores, es decir, SMTP e IMAP
@@ -140,20 +140,21 @@ def waitEmail():
 	print 'El modo EMAIL ha terminado!'
 
 def sendEmail(emailDestination, emailSubject, emailMessage):
-        """ Envia un mensaje de correo electronico.
-            @param emailDestination: correo electronico del destinatario
-            @type emailDestination: str
-            @param emailSubject: asunto del mensaje
-            @type emailSubject: str
-            @param emailMessage: correo electronico a enviar
-            @type emailMessage: str """
-	# Construimos un mensaje simple
-	simpleMessage = MIMEText(emailMessage)
-	simpleMessage['From'] = contactList.EMAIL_SERVER
-	simpleMessage['To'] = emailDestination
-	simpleMessage['Subject'] = emailSubject
-	# Enviamos el mensaje, al correo destino correspondiente
-	smtpServer.sendmail(simpleMessage['From'], simpleMessage['To'], simpleMessage.as_string())
+    """ Envia un mensaje de correo electronico.
+    @param emailDestination: correo electronico del destinatario
+    @type emailDestination: str
+    @param emailSubject: asunto del mensaje
+    @type emailSubject: str
+    @param emailMessage: correo electronico a enviar
+    @type emailMessage: str """
+    # Construimos un mensaje simple
+    print 'Se esta por enviar el Email'
+    simpleMessage = MIMEText(emailMessage)
+    simpleMessage['From'] = contactList.EMAIL_SERVER
+    simpleMessage['To'] = emailDestination
+    simpleMessage['Subject'] = emailSubject
+    # Enviamos el mensaje, al correo destino correspondiente
+    smtpServer.sendmail(simpleMessage['From'], simpleMessage['To'], simpleMessage.as_string())
 
 def processEmailHeader(emailReceived):
         """ Envia a procesar la cabecera del EMAIL. Le indica al modulo de procesamiento que se trata
